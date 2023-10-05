@@ -182,15 +182,15 @@
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
 import { pub as api } from "@/api";
-import { filesize } from "filesize";
+import filesize from "filesize";
 import moment from "moment";
 
-import HeaderBar from "@/components/header/HeaderBar.vue";
-import Action from "@/components/header/Action.vue";
-import Breadcrumbs from "@/components/Breadcrumbs.vue";
-import Errors from "@/views/Errors.vue";
+import HeaderBar from "@/components/header/HeaderBar";
+import Action from "@/components/header/Action";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import Errors from "@/views/Errors";
 import QrcodeVue from "qrcode.vue";
-import Item from "@/components/files/ListingItem.vue";
+import Item from "@/components/files/ListingItem";
 import Clipboard from "clipboard";
 
 export default {

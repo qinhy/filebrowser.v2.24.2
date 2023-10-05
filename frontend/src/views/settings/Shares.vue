@@ -65,7 +65,7 @@ import { share as api, users } from "@/api";
 import { mapState, mapMutations } from "vuex";
 import moment from "moment";
 import Clipboard from "clipboard";
-import Errors from "@/views/Errors.vue";
+import Errors from "@/views/Errors";
 
 export default {
   name: "shares",

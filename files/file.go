@@ -29,21 +29,20 @@ const PermDir = 0755
 // FileInfo describes a file.
 type FileInfo struct {
 	*Listing
-	Fs         afero.Fs          `json:"-"`
-	Path       string            `json:"path"`
-	Name       string            `json:"name"`
-	Size       int64             `json:"size"`
-	Extension  string            `json:"extension"`
-	ModTime    time.Time         `json:"modified"`
-	Mode       os.FileMode       `json:"mode"`
-	IsDir      bool              `json:"isDir"`
-	IsSymlink  bool              `json:"isSymlink"`
-	Type       string            `json:"type"`
-	Subtitles  []string          `json:"subtitles,omitempty"`
-	Content    string            `json:"content,omitempty"`
-	Checksums  map[string]string `json:"checksums,omitempty"`
-	Token      string            `json:"token,omitempty"`
-	currentDir []os.FileInfo     `json:"-"`
+	Fs        afero.Fs          `json:"-"`
+	Path      string            `json:"path"`
+	Name      string            `json:"name"`
+	Size      int64             `json:"size"`
+	Extension string            `json:"extension"`
+	ModTime   time.Time         `json:"modified"`
+	Mode      os.FileMode       `json:"mode"`
+	IsDir     bool              `json:"isDir"`
+	IsSymlink bool              `json:"isSymlink"`
+	Type      string            `json:"type"`
+	Subtitles []string          `json:"subtitles,omitempty"`
+	Content   string            `json:"content,omitempty"`
+	Checksums map[string]string `json:"checksums,omitempty"`
+	Token     string            `json:"token,omitempty"`
 }
 
 // FileOptions are the options when getting a file info.
@@ -295,21 +294,13 @@ func (i *FileInfo) detectSubtitles() {
 	// detect multiple languages. Base*.vtt
 	// TODO: give subtitles descriptive names (lang) and track attributes
 	parentDir := strings.TrimRight(i.Path, i.Name)
-	var dir []os.FileInfo
-	if len(i.currentDir) > 0 {
-		dir = i.currentDir
-	} else {
-		var err error
-		dir, err = afero.ReadDir(i.Fs, parentDir)
-		if err != nil {
-			return
-		}
-	}
-
-	base := strings.TrimSuffix(i.Name, ext)
-	for _, f := range dir {
-		if !f.IsDir() && strings.HasPrefix(f.Name(), base) && strings.HasSuffix(f.Name(), ".vtt") {
-			i.Subtitles = append(i.Subtitles, path.Join(parentDir, f.Name()))
+	dir, err := afero.ReadDir(i.Fs, parentDir)
+	if err == nil {
+		base := strings.TrimSuffix(i.Name, ext)
+		for _, f := range dir {
+			if !f.IsDir() && strings.HasPrefix(f.Name(), base) && strings.HasSuffix(f.Name(), ".vtt") {
+				i.Subtitles = append(i.Subtitles, path.Join(parentDir, f.Name()))
+			}
 		}
 	}
 }
@@ -349,16 +340,15 @@ func (i *FileInfo) readListing(checker rules.Checker, readHeader bool) error {
 		}
 
 		file := &FileInfo{
-			Fs:         i.Fs,
-			Name:       name,
-			Size:       f.Size(),
-			ModTime:    f.ModTime(),
-			Mode:       f.Mode(),
-			IsDir:      f.IsDir(),
-			IsSymlink:  isSymlink,
-			Extension:  filepath.Ext(name),
-			Path:       fPath,
-			currentDir: dir,
+			Fs:        i.Fs,
+			Name:      name,
+			Size:      f.Size(),
+			ModTime:   f.ModTime(),
+			Mode:      f.Mode(),
+			IsDir:     f.IsDir(),
+			IsSymlink: isSymlink,
+			Extension: filepath.Ext(name),
+			Path:      fPath,
 		}
 
 		if file.IsDir {

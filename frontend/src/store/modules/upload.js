@@ -11,8 +11,6 @@ const state = {
   progress: [],
   queue: [],
   uploads: {},
-  speedMbyte: 0,
-  eta: 0,
 };
 
 const mutations = {

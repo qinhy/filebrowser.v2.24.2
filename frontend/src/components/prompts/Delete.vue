@@ -37,8 +37,8 @@ import buttons from "@/utils/buttons";
 export default {
   name: "delete",
   computed: {
-    ...mapGetters(["isListing", "selectedCount", "currentPrompt"]),
-    ...mapState(["req", "selected"]),
+    ...mapGetters(["isListing", "selectedCount"]),
+    ...mapState(["req", "selected", "showConfirm"]),
   },
   methods: {
     ...mapMutations(["closeHovers"]),
@@ -50,7 +50,7 @@ export default {
           await api.remove(this.$route.path);
           buttons.success("delete");
 
-          this.currentPrompt?.confirm();
+          this.showConfirm();
           this.closeHovers();
           return;
         }

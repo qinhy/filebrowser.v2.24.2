@@ -11,7 +11,7 @@
         v-for="(ext, format) in formats"
         :key="format"
         class="button button--block"
-        @click="currentPrompt.confirm(format)"
+        @click="showConfirm(format)"
         v-focus
       >
         {{ ext }}
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "download",
@@ -38,8 +38,6 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapGetters(["currentPrompt"]),
-  },
+  computed: mapState(["showConfirm"]),
 };
 </script>

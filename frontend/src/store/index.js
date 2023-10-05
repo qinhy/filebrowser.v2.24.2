@@ -20,8 +20,10 @@ const state = {
   reload: false,
   selected: [],
   multiple: false,
-  prompts: [],
+  show: null,
   showShell: false,
+  showConfirm: null,
+  showAction: null,
 };
 
 export default new Vuex.Store({
