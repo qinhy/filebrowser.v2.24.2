@@ -2,17 +2,19 @@ FROM golang:alpine
 RUN apk --update add --no-cache npm
 RUN apk --update add --no-cache make
 RUN apk --update add --no-cache git
+RUN apk --update add --no-cache bash
 
 workdir /
 RUN git clone https://github.com/filebrowser/filebrowser.git
 
 workdir /filebrowser
 RUN git checkout v2.24.2
-COPY . /filebrowser
-RUN cd ./frontend && npx -y tailwindcss -i ./src/css/twmain.css -o ./src/css/twmain.css
+RUN rm -rf ./frontend
+COPY ./frontend /filebrowser/frontend
+RUN cd ./frontend && npx -y tailwindcss -i ./src/css/twmain.css -o ./dist/css/twmain.css
 RUN export NODE_OPTIONS=--openssl-legacy-provider && make build
-# EXPOSE 8080
-# ENTRYPOINT [ "/filebrowser/filebrowser", "-a", "0.0.0.0"]
+EXPOSE 8080
+ENTRYPOINT [ "/filebrowser/filebrowser", "-a", "0.0.0.0"]
 # ENTRYPOINT ["cd","./frontend","&&","npx","tailwindcss","-i","./src/css/twmain.css","-o","./src/css/twmain.css","&&","make","build"]
 # ENTRYPOINT ["/bin/sh"]
 
